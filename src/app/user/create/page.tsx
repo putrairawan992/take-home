@@ -1,7 +1,7 @@
 // components/CreateUserForm.tsx
 "use client";
 import React from "react";
-import { Form, Input, Button, Typography } from "antd";
+import { Form, Input, Button, Typography, notification } from "antd";
 import { createUser } from "@root/libs/redux/reducers/usersSlice";
 import { useAppDispatch } from "@root/libs/redux/store";
 import { useRouter } from "next/navigation";
@@ -13,8 +13,10 @@ const CreateUserForm: React.FC = () => {
   const route = useRouter();
 
   const onFinish = (values: any) => {
-    dispatch(createUser(values));
-    route.push("/user");
+    dispatch(createUser(values)).then(() => {
+      route.push("/user");
+      notification.success({ message: "User created successfully" })
+    });
   };
 
   const onFinishFailed = (errorInfo: any) => {

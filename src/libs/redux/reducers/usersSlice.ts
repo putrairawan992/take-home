@@ -3,8 +3,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-interface User {
-  id: number;
+export type User = {
+  id: number | string | string[];
   name: string;
   email: string;
   phone: string;
@@ -61,13 +61,7 @@ export const updateUser = createAsyncThunk(
     email,
     phone,
     website,
-  }: {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    website: string;
-  }) => {
+  }: User) => {
     const response = await axios.put(
       `https://jsonplaceholder.typicode.com/users/${id}`,
       { name, email, phone, website }
@@ -79,8 +73,8 @@ export const updateUser = createAsyncThunk(
 export const deleteUser = createAsyncThunk(
   "users/deleteUser",
   async (userId: string) => {
-    await axios.delete(`https://jsonplaceholder.typicode.com/users/${userId}`);
-    return userId;
+    const { data } = await axios.delete (`https://jsonplaceholder.typicode.com/users/${userId}`);
+    return data;
   }
 );
 

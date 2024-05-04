@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Button, Space, Table, Typography } from "antd";
+import { Button, Space, Table, Typography, notification } from "antd";
 import { deleteUser, fetchUsers } from "@root/libs/redux/reducers/usersSlice";
 import { RootState } from "@root/libs/redux/reducers/rootReducers";
 import { useAppDispatch } from "@root/libs/redux/store";
@@ -18,7 +18,7 @@ const UsersList: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchUsers());
-  }, []);
+  }, [dispatch]);
 
   const columns = [
     {
@@ -52,8 +52,10 @@ const UsersList: React.FC = () => {
             type="link"
             danger
             onClick={() => {
-              dispatch(deleteUser(record.id));
-              dispatch(fetchUsers());
+              dispatch(deleteUser(record.id)).then(() => {
+                dispatch(fetchUsers());
+                notification.success({ message: "User deleted successfully" });
+              });
             }}
           >
             Delete

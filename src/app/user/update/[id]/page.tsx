@@ -1,9 +1,9 @@
 // components/CreateUserForm.tsx
 "use client";
 import React, { useEffect } from "react";
-import { Form, Input, Button, Typography } from "antd";
+import { Form, Input, Button, Typography, notification } from "antd";
 import {
-  createUser,
+  User,
   fetchUserById,
   updateUser,
 } from "@root/libs/redux/reducers/usersSlice";
@@ -31,13 +31,15 @@ const CreateUserForm: React.FC = () => {
     form.setFieldValue("website", selectedUser?.website);
   }, [form, selectedUser]);
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: User) => {
     const val = {
       ...values,
       id: param.id,
     };
-    dispatch(updateUser(val));
-    route.push("/user");
+    dispatch(updateUser(val)).then(()=>{
+      notification.success({message:"Success update user"});
+      route.push("/user");
+    });
   };
 
   const onFinishFailed = (errorInfo: any) => {
